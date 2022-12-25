@@ -19,32 +19,6 @@ MY_PASS = os.environ.get("MY_PASS",None)
 pass_dict = {}
 pass_db = Database(Var.DATABASE_URL, "ag_passwords")
 
-
-@StreamBot.on_message((filters.regex("loginhb🔑") | filters.command("loginhb")) , group=4)
-async def login_handler(c: Client, m: Message):
-    try:
-        try:
-            ag = await m.reply_text("Now send me password.\n\n for password send 10rs to `sharundas123@ybl` and send screen shot to @kwicadmin \n\n (for running bot need contributions..unwanted message = ban + report)")
-            _text = await c.listen(m.chat.id, filters=filters.text, timeout=90)
-            if _text.text:
-                textp = _text.text
-                if textp=="/cancel":
-                   await ag.edit("Process Cancelled Successfully")
-                   return
-            else:
-                return
-        except TimeoutError:
-            await ag.edit("I can't wait more for password, try again")
-            return
-        if textp == MY_PASS:
-            await pass_db.add_user_pass(m.chat.id, textp)
-            ag_text = "yeah! you entered the password correctly"
-        else:
-            ag_text = "Wrong password, try again"
-        await ag.edit(ag_text)
-    except Exception as e:
-        print(e)
-
 @StreamBot.on_message((filters.private) & (filters.document | filters.video | filters.audio | filters.photo) , group=4)
 async def private_receive_handler(c: Client, m: Message):
     if not await db.is_user_exist(m.from_user.id):
